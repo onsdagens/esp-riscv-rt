@@ -15,6 +15,7 @@
 
 // NOTE: Adapted from riscv-rt/src/lib.rs
 #![no_std]
+#![feature(linkage)]
 
 use core::arch::global_asm;
 
@@ -435,9 +436,8 @@ _abs_start:
 .global default_start_trap
 
 default_start_trap:
-    addi sp, sp, -40*4
 
-    sw ra, 0*4(sp)
+
     sw t0, 1*4(sp)
     sw t1, 2*4(sp)
     sw t2, 3*4(sp)
@@ -475,19 +475,22 @@ default_start_trap:
     sw t1, 33*4(sp)
     csrrs t1, mtval, x0
     sw t1, 34*4(sp)
-
     addi s0, sp, 40*4
     sw s0, 30*4(sp)
-
     add a0, sp, zero
-    jal ra, _start_trap_rust_hal
+
+    /* move ra to callee preserved register */
+    add s0, ra, zero
+
+
+    jalr ra, s0
+
+
 
     lw t1, 31*4(sp)
     csrrw x0, mepc, t1
-
     lw t1, 32*4(sp)
     csrrw x0, mstatus, t1
-
     lw ra, 0*4(sp)
     lw t0, 1*4(sp)
     lw t1, 2*4(sp)
@@ -519,7 +522,6 @@ default_start_trap:
     lw gp, 28*4(sp)
     lw tp, 29*4(sp)
     lw sp, 30*4(sp)
-
     # SP was restored from the original SP
     mret
 
@@ -543,11 +545,686 @@ abort:
 .option norvc
 
 _vector_table:
-    j _start_trap
-    .rept 31
-    j _start_trap
-    .endr
-
+"#,
+    r#"j _default_handler"#, //ID 0 is reserved for exceptions, just use default for now to take advantage of atomic emulation
+    r#"j _handler_1"#,
+    r#"j _handler_2"#,
+    r#"j _handler_3"#,
+    r#"j _handler_4"#,
+    r#"j _handler_5"#,
+    r#"j _handler_6"#,
+    r#"j _handler_7"#,
+    r#"j _handler_8"#,
+    r#"j _handler_9"#,
+    r#"j _handler_10"#,
+    r#"j _handler_11"#,
+    r#"j _handler_12"#,
+    r#"j _handler_13"#,
+    r#"j _handler_14"#,
+    r#"j _handler_15"#,
+    r#"j _handler_16"#,
+    r#"j _handler_17"#,
+    r#"j _handler_18"#,
+    r#"j _handler_19"#,
+    r#"j _handler_20"#,
+    r#"j _handler_21"#,
+    r#"j _handler_22"#,
+    r#"j _handler_23"#,
+    r#"j _handler_24"#,
+    r#"j _handler_25"#,
+    r#"j _handler_26"#,
+    r#"j _handler_27"#,
+    r#"j _handler_28"#,
+    r#"j _handler_29"#,
+    r#"j _handler_30"#,
+    r#"j _handler_31"#,
+r#"
 .option pop
 "#,
+    r#"_handler_0:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_0_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_1:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_1_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_2:
+        
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_2_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_3:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_3_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_4:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_4_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_5:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_5_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_6:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_6_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_7:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_7_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_8:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_8_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_9:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_9_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_10:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_10_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_11:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_11_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_12:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_12_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_13:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_13_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_14:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_14_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_15:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_15_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_16:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_16_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_17:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_17_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_18:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_18_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_19:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_19_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_20:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_20_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_21:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_21_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_22:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_22_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_23:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_23_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_24:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_24_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_25:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_25_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_26:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_26_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_27:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_27_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_28:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_28_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_29:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_29_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_30:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_30_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+    r#"_handler_31:
+    
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    /*push context to stack*/
+    add s2 , ra, zero 
+    jal ra, cpu_int_31_handler
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jr s2, 0
+    /*de-stack context*/"#,
+r#" 
+_default_handler:
+    addi sp, sp, -40*4
+    sw ra, 0*4(sp)
+    jal ra, _start_trap
+    add s2, ra, zero  
+    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    jal ra, _default_handler /* for now just "panic loop" */
+    jr s2, 0
+"#,
 }
+#[export_name = "cpu_int_0_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr0() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+#[export_name = "cpu_int_1_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr1() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+#[export_name = "cpu_int_2_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr2() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_3_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr3() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_4_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr4() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_5_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr5() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_6_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr6() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_7_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr7() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_8_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr8() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_9_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr9() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_10_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr10() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_11_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr11() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_12_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr12() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_13_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr13() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_14_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr14() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_15_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr15() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_16_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr16() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+#[export_name = "cpu_int_17_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr17() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+#[export_name = "cpu_int_18_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr18() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_19_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr19() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_20_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr20() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_21_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr21() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_22_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr22() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_23_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr23() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_24_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr24() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_25_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr25() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_26_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr26() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_27_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr27() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_28_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr28() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_29_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr29() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_30_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr30() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
+#[export_name = "cpu_int_31_handler"]
+#[linkage = "weak"]
+#[link_section = ".trap"]
+fn hndlr31() {
+    loop{
+        continue; //as default panic spin since no reasonable handler exists
+    }
+}
+
