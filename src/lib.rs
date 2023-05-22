@@ -23,8 +23,9 @@ use riscv::register::{
     mcause,
     mtvec::{self, TrapMode},
 };
+use riscv::interrupt as r_interrupt;
 pub use riscv_rt_macros::{entry, pre_init};
-
+use rtt_target::rprintln;
 pub use self::Interrupt as interrupt;
 
 #[export_name = "error: esp-riscv-rt appears more than once in the dependency graph"]
@@ -144,10 +145,59 @@ pub unsafe extern "C" fn start_trap_rust(trap_frame: *const TrapFrame) {
 #[doc(hidden)]
 #[no_mangle]
 #[allow(unused_variables, non_snake_case)]
-pub fn DefaultExceptionHandler(trap_frame: &TrapFrame) -> ! {
-    loop {
+pub fn DefaultExceptionHandler(pc: usize,trap_frame: &mut [usize; 32]){
+    //loop {
         // Prevent this from turning into a UDF instruction
         // see rust-lang/rust#28728 for details
+    //    continue;
+   // }
+   let insn: usize = unsafe{*(pc as *const _)};
+   if (insn & 0b1111111) == 0b1110011 {
+    match (insn >> 12) & 0b111{
+        0b111 => {
+            //trap_frame[(insn>>7) & 0b11111] = riscv::register::mstatus::read().bits();
+            unsafe{riscv::interrupt::disable()};
+            //rprintln!("disabled ints");
+            return
+        }
+        0b110 => {
+            //trap_frame[(insn>>7) & 0b11111] = riscv::register::mstatus::read().bits();
+            unsafe{riscv::interrupt::enable()};    
+            //rprintln!("enabled ints");
+            return
+        }
+        _ => {
+            rprintln!("Unsupported csrx");
+            loop{
+                continue;
+            }
+        }
+    }
+   }
+   else{
+    rprintln!("some other instruction");
+    loop{
+        continue;
+    }
+   }
+//    rprintln!("{:b}", insn & 0b1111111);
+//    if ((insn & 0b1111111) == 0b1110011){ //some sort of csrx or ecall/sysbreak
+//     if ((insn >> 12  & (0b111)) == 0b111){ //CSRRCI
+//         rprintln!("CSRRCI, probably trying to disable interrupts...");
+//         unsafe{r_interrupt::disable()}
+//         return
+//     }
+//     else{
+//         rprintln!("{:b}",insn & (0b111 << 12));
+//         rprintln!("something else");
+//         unsafe{r_interrupt::enable()}
+//         return
+//     }
+//    }
+//    rprintln!("{:b}", insn);
+//    rprintln!("uhohstinky");
+    rprintln!("something else");
+    loop{
         continue;
     }
 }
