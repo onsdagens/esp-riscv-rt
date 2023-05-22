@@ -155,50 +155,18 @@ pub fn DefaultExceptionHandler(pc: usize,trap_frame: &mut [usize; 32]){
    if (insn & 0b1111111) == 0b1110011 {
     match (insn >> 12) & 0b111{
         0b111 => {
-            //trap_frame[(insn>>7) & 0b11111] = riscv::register::mstatus::read().bits();
             unsafe{riscv::interrupt::disable()};
-            //rprintln!("disabled ints");
             return
         }
         0b110 => {
-            //trap_frame[(insn>>7) & 0b11111] = riscv::register::mstatus::read().bits();
             unsafe{riscv::interrupt::enable()};    
-            //rprintln!("enabled ints");
             return
         }
         _ => {
-            rprintln!("Unsupported csrx");
-            loop{
-                continue;
-            }
         }
     }
    }
    else{
-    rprintln!("some other instruction");
-    loop{
-        continue;
-    }
-   }
-//    rprintln!("{:b}", insn & 0b1111111);
-//    if ((insn & 0b1111111) == 0b1110011){ //some sort of csrx or ecall/sysbreak
-//     if ((insn >> 12  & (0b111)) == 0b111){ //CSRRCI
-//         rprintln!("CSRRCI, probably trying to disable interrupts...");
-//         unsafe{r_interrupt::disable()}
-//         return
-//     }
-//     else{
-//         rprintln!("{:b}",insn & (0b111 << 12));
-//         rprintln!("something else");
-//         unsafe{r_interrupt::enable()}
-//         return
-//     }
-//    }
-//    rprintln!("{:b}", insn);
-//    rprintln!("uhohstinky");
-    rprintln!("something else");
-    loop{
-        continue;
     }
 }
 
