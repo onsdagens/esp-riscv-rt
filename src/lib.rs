@@ -145,28 +145,226 @@ pub unsafe extern "C" fn start_trap_rust(trap_frame: *const TrapFrame) {
 #[doc(hidden)]
 #[no_mangle]
 #[allow(unused_variables, non_snake_case)]
-pub fn DefaultExceptionHandler(pc: usize,trap_frame: &mut [usize; 32]){
+pub fn DefaultExceptionHandler(pc: usize,trap_frame: &mut [usize; 33]){
     //loop {
         // Prevent this from turning into a UDF instruction
         // see rust-lang/rust#28728 for details
     //    continue;
    // }
+   //i'm thinking maybe we can just load mepc and jr ra from here...
    let insn: usize = unsafe{*(pc as *const _)};
-   if (insn & 0b1111111) == 0b1110011 {
+   if (insn & 0b1111111) == 0b1110011 { //CSR opcode
     match (insn >> 12) & 0b111{
-        0b111 => {
-            unsafe{riscv::interrupt::disable()};
+        0b111 => {  //csrci clear immediate
+            match insn >> 20{               
+                0x300 => {
+                    //mstatus
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mstatus::read().bits;
+                    if ((insn >> 15) & 0b11111) != 0{ //if 0 no write should occur
+                    unsafe{riscv::register::mstatus::clear(insn >> 15 & 0b11111);};
+                    } 
+                }
+                0x341 =>{
+                    //mepc
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mepc::read();
+                    if ((insn >> 15) & 0b11111) != 0{ //if 0 no write should occur
+                    unsafe{riscv::register::mepc::clear(insn >> 15 & 0b11111);};
+                    } 
+                }
+                0x342 => {
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mcause::read().bits;
+                    //mcause should only be read 
+                }
+                _ => {
+                    loop{
+                        continue //unsuported csr
+                    }
+                }
+            } 
             return
         }
-        0b110 => {
-            unsafe{riscv::interrupt::enable()};    
+        0b110 => { //csrrsi set immediate
+            match insn >> 20{               
+                0x300 => {
+                    //mstatus
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mstatus::read().bits;
+                    if ((insn >> 15) & 0b11111) != 0{ //if 0 no write should occur
+                    unsafe{riscv::register::mstatus::set(insn >> 15 & 0b11111);};
+                    } 
+                }
+                0x341 =>{
+                    //mepc
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mepc::read();
+                    if ((insn >> 15) & 0b11111) != 0{ //if 0 no write should occur
+                    unsafe{riscv::register::mepc::set(insn >> 15 & 0b11111);};
+                    } 
+                }
+                0x342 => {
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mcause::read().bits;
+                    //mcause should only be read 
+                }
+                _ => {
+                    loop{
+                        continue //unsuported csr
+                    }
+                }
+            } 
             return
+        }
+        0b001 => { //csrrw read write
+            match insn >> 20{               
+                0x300 => {
+                    //mstatus
+                    //dest = 11:7
+                    //src = 19:15
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mstatus::read().bits;
+                    unsafe{riscv::register::mstatus::write(trap_frame[( insn >> 15) & 0b11111]);};
+                }
+                0x341 =>{
+                    //mepc
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mepc::read();
+                    riscv::register::mepc::write(trap_frame[( insn >> 15) & 0b11111]);
+                }
+                0x342 => {
+                    //mcause should only be read 
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mcause::read().bits;
+                    //riscv::register::mcause::write(trap_frame[( insn >> 15) & 0b11111]);
+                }
+                _ => {
+                    loop{
+                        continue //unsuported csr
+                    }
+                }
+            } 
+            return
+
+        }
+        0b010 => { //csrrs read set
+            match insn >> 20{               
+                0x300 => {
+                    //mstatus
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mstatus::read().bits;
+                    unsafe{riscv::register::mstatus::set(trap_frame[( insn >> 15) & 0b11111]);};
+                }
+                0x341 =>{
+                    //mepc
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mepc::read();
+                    unsafe{riscv::register::mepc::set(trap_frame[( insn >> 15) & 0b11111]);}
+                }
+                0x342 => {
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mcause::read().bits;
+                    //mcause should only be read 
+                }
+                _ => {
+                    loop{
+                        continue //unsuported csr
+                    }
+                }
+            } 
+            return
+
+        }
+        0b011 => { //csrrc read clear
+            match insn >> 20{              
+                0x300 => {
+                    //mstatus
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mstatus::read().bits;
+                    unsafe{riscv::register::mstatus::clear(trap_frame[( insn >> 15) & 0b11111]);};
+                }
+                0x341 =>{
+                    //mepc
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mepc::read();
+                    unsafe{riscv::register::mepc::clear(trap_frame[( insn >> 15) & 0b11111]);}
+                }
+                0x342 => {
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mcause::read().bits;
+                    //mcause should only be read 
+                }
+                _ => {
+                    loop{
+                        continue //unsuported csr
+                    }
+                }
+            } 
+            return
+
+        }
+        0b101 => { //csrrwi read write immediate
+            match insn >> 20{               
+                0x300 => {
+                    //mstatus
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mstatus::read().bits;
+                    if ((insn >> 15) & 0b11111) != 0{ 
+                    unsafe{riscv::register::mstatus::write(insn >> 15 & 0b11111);};
+                    } 
+                }
+                0x341 =>{
+                    //mepc
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mepc::read();
+                    if ((insn >> 15) & 0b11111) != 0{ 
+                    unsafe{riscv::register::mepc::write(insn >> 15 & 0b11111);};
+                    } 
+                }
+                0x342 => {
+                    trap_frame[insn >> 7 & 0b11111] = riscv::register::mcause::read().bits;
+                    //mcause should only be read 
+                }
+                _ => {
+                    loop{
+                        continue //unsuported csr
+                    }
+                }
+            } 
+            return  
+        }
+        0b000 => {
+                    match(riscv::register::mcause::read().bits){
+            5 => {rprintln!("PMP Load violation");}
+            7 => {rprintln!("PMP Store violation");}
+            8 => {  unsafe{riscv::register::mstatus::set_mpp(riscv::register::mstatus::MPP::Machine);
+                    trap_frame[32] = riscv::register::mstatus::read().bits;
+                    trap_frame[31] += 4;
+                    }; //allow the ecall
+                    return;
+                }
+
+            0xb => {rprintln!("ECALL from M"); //just return we don't care
+                    trap_frame[31]+=4;
+                    return;
+                
+                }
+            _ => {rprintln!("Unhandled exception (csrrw ecall related)");
+                rprintln!("mcause:{:b}", riscv::register::mcause::read().bits);
+                rprintln!("mtval:{:b}", riscv::register::mtval::read());
+                rprintln!("mstatus:{:b}", riscv::register::mstatus::read().bits);
+                    loop{continue;}}
+        }
         }
         _ => {
+            loop{continue;}
         }
     }
    }
    else{
+        match(riscv::register::mcause::read().bits){
+            5 => {rprintln!("PMP Load violation");}
+            7 => {rprintln!("PMP Store violation");}
+            8 => {
+                    unsafe{riscv::register::mstatus::set_mpp(riscv::register::mstatus::MPP::Machine);
+                    trap_frame[32] = riscv::register::mstatus::read().bits;
+                    trap_frame[31] += 4;
+                    }; //allow the ecall
+                    return
+                }
+            9 => {rprintln!("ECALL from M");}
+            _ => {
+                rprintln!("mcause:{:b}", riscv::register::mcause::read().bits);
+                rprintln!("mtval:{:b}", riscv::register::mtval::read());
+                rprintln!("mstatus:{:b}", riscv::register::mstatus::read().bits);
+                rprintln!("Unhandled exception (something else)");
+            }
+        }
+        loop{continue;} //something went horribly wrong
     }
 }
 
@@ -261,6 +459,8 @@ pub unsafe extern "Rust" fn default_setup_interrupts() {
 
     mtvec::write(_start_trap as usize, TrapMode::Direct);
 }
+
+
 
 /// Parse cfg attributes inside a global_asm call.
 macro_rules! cfg_global_asm {
