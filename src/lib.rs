@@ -15,6 +15,7 @@
 
 // NOTE: Adapted from riscv-rt/src/lib.rs
 #![no_std]
+#![recursion_limit="2048"]
 
 use core::arch::global_asm;
 
@@ -262,7 +263,6 @@ macro_rules! cfg_global_asm {
         cfg_global_asm!{@inner, [], $($asms)*}
     };
 }
-
 cfg_global_asm! {
     r#"
 /*
@@ -464,7 +464,10 @@ _abs_start:
 .weak _start_trap29
 .weak _start_trap30
 .weak _start_trap31
-
+"#,
+#[cfg(not(feature = "direct-interrupts"))]
+r#"
+_start_trap0:
 _start_trap1:
 _start_trap2:
 _start_trap3:
@@ -585,7 +588,325 @@ _start_trap:
 
     # SP was restored from the original SP
     mret
+"#,
+#[cfg(feature = "direct-interrupts")]
+r#"
+_start_trap0:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, _start_trap_rust_hal
+    j _start_trap
 
+_start_trap1:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_1_handler
+    j _start_trap
+_start_trap2:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_2_handler
+    j _start_trap
+_start_trap3:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_3_handler
+    j _start_trap
+_start_trap4:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_4_handler
+    j _start_trap
+_start_trap5:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_5_handler
+    j _start_trap
+_start_trap6:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_6_handler
+    j _start_trap
+_start_trap7:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_7_handler
+    j _start_trap
+_start_trap8:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_8_handler
+    j _start_trap
+_start_trap9:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_9_handler
+    j _start_trap
+_start_trap10:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_10_handler
+    j _start_trap
+_start_trap11:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_11_handler
+    j _start_trap
+_start_trap12:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_12_handler
+    j _start_trap
+_start_trap13:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_13_handler
+    j _start_trap
+_start_trap14:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_14_handler
+    j _start_trap
+_start_trap15:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_15_handler
+    j _start_trap
+_start_trap16:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_16_handler
+    j _start_trap
+_start_trap17:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_17_handler
+    j _start_trap
+_start_trap18:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_18_handler
+    j _start_trap
+_start_trap19:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_19_handler
+    j _start_trap
+_start_trap20:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_20_handler
+    j _start_trap
+_start_trap21:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_21_handler
+    j _start_trap
+_start_trap22:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_22_handler
+    j _start_trap
+_start_trap23:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_23_handler
+    j _start_trap
+_start_trap24:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_24_handler
+    j _start_trap
+_start_trap25:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_25_handler
+    j _start_trap
+_start_trap26:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_26_handler
+    j _start_trap
+_start_trap27:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_27_handler
+    j _start_trap
+_start_trap28:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_28_handler
+    j _start_trap
+_start_trap29:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_29_handler
+    j _start_trap
+_start_trap30:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_30_handler
+    j _start_trap
+_start_trap31:
+    addi sp, sp, -40*4
+    sw t0, 1*4(sp)
+    la t0, cpu_int_31_handler
+    j _start_trap
+.weak cpu_int_1_handler
+.weak cpu_int_2_handler
+.weak cpu_int_3_handler
+.weak cpu_int_4_handler
+.weak cpu_int_5_handler
+.weak cpu_int_6_handler
+.weak cpu_int_7_handler
+.weak cpu_int_8_handler
+.weak cpu_int_9_handler
+.weak cpu_int_10_handler
+.weak cpu_int_11_handler
+.weak cpu_int_12_handler
+.weak cpu_int_13_handler
+.weak cpu_int_14_handler
+.weak cpu_int_15_handler
+.weak cpu_int_16_handler
+.weak cpu_int_17_handler
+.weak cpu_int_18_handler
+.weak cpu_int_19_handler
+.weak cpu_int_20_handler
+.weak cpu_int_21_handler
+.weak cpu_int_22_handler
+.weak cpu_int_23_handler
+.weak cpu_int_24_handler
+.weak cpu_int_25_handler
+.weak cpu_int_26_handler
+.weak cpu_int_27_handler
+.weak cpu_int_28_handler
+.weak cpu_int_29_handler
+.weak cpu_int_30_handler
+.weak cpu_int_31_handler
+
+
+cpu_int_1_handler:
+cpu_int_2_handler:
+cpu_int_3_handler:
+cpu_int_4_handler:
+cpu_int_5_handler:
+cpu_int_6_handler:
+cpu_int_7_handler:
+cpu_int_8_handler:
+cpu_int_9_handler:
+cpu_int_10_handler:
+cpu_int_11_handler:
+cpu_int_12_handler:
+cpu_int_13_handler:
+cpu_int_14_handler:
+cpu_int_15_handler:
+cpu_int_16_handler:
+cpu_int_17_handler:
+cpu_int_18_handler:
+cpu_int_19_handler:
+cpu_int_20_handler:
+cpu_int_21_handler:
+cpu_int_22_handler:
+cpu_int_23_handler:
+cpu_int_24_handler:
+cpu_int_25_handler:
+cpu_int_26_handler:
+cpu_int_27_handler:
+cpu_int_28_handler:
+cpu_int_29_handler:
+cpu_int_30_handler:
+cpu_int_31_handler:
+    j _start_trap_rust_hal
+
+_start_trap:
+
+    sw ra, 0*4(sp)
+
+    sw t1, 2*4(sp)
+    sw t2, 3*4(sp)
+    sw t3, 4*4(sp)
+    sw t4, 5*4(sp)
+    sw t5, 6*4(sp)
+    sw t6, 7*4(sp)
+    sw a0, 8*4(sp)
+    sw a1, 9*4(sp)
+    sw a2, 10*4(sp)
+    sw a3, 11*4(sp)
+    sw a4, 12*4(sp)
+    sw a5, 13*4(sp)
+    sw a6, 14*4(sp)
+    sw a7, 15*4(sp)
+    sw s0, 16*4(sp)
+    sw s1, 17*4(sp)
+    sw s2, 18*4(sp)
+    sw s3, 19*4(sp)
+    sw s4, 20*4(sp)
+    sw s5, 21*4(sp)
+    sw s6, 22*4(sp)
+    sw s7, 23*4(sp)
+    sw s8, 24*4(sp)
+    sw s9, 25*4(sp)
+    sw s10, 26*4(sp)
+    sw s11, 27*4(sp)
+    sw gp, 28*4(sp)
+    sw tp, 29*4(sp)
+    csrrs t1, mepc, x0
+    sw t1, 31*4(sp)
+    csrrs t1, mstatus, x0
+    sw t1, 32*4(sp)
+    csrrs t1, mcause, x0
+    sw t1, 33*4(sp)
+    csrrs t1, mtval, x0
+    sw t1, 34*4(sp)
+
+    addi s0, sp, 40*4
+    sw s0, 30*4(sp)
+
+    add a0, sp, zero
+    jalr ra, t0
+
+    lw t1, 31*4(sp)
+    csrrw x0, mepc, t1
+
+    lw t1, 32*4(sp)
+    csrrw x0, mstatus, t1
+
+    lw ra, 0*4(sp)
+    lw t0, 1*4(sp)
+    lw t1, 2*4(sp)
+    lw t2, 3*4(sp)
+    lw t3, 4*4(sp)
+    lw t4, 5*4(sp)
+    lw t5, 6*4(sp)
+    lw t6, 7*4(sp)
+    lw a0, 8*4(sp)
+    lw a1, 9*4(sp)
+    lw a2, 10*4(sp)
+    lw a3, 11*4(sp)
+    lw a4, 12*4(sp)
+    lw a5, 13*4(sp)
+    lw a6, 14*4(sp)
+    lw a7, 15*4(sp)
+    lw s0, 16*4(sp)
+    lw s1, 17*4(sp)
+    lw s2, 18*4(sp)
+    lw s3, 19*4(sp)
+    lw s4, 20*4(sp)
+    lw s5, 21*4(sp)
+    lw s6, 22*4(sp)
+    lw s7, 23*4(sp)
+    lw s8, 24*4(sp)
+    lw s9, 25*4(sp)
+    lw s10, 26*4(sp)
+    lw s11, 27*4(sp)
+    lw gp, 28*4(sp)
+    lw tp, 29*4(sp)
+    lw sp, 30*4(sp)
+
+    # SP was restored from the original SP
+    mret
+"#,
+r#"
 /* Make sure there is an abort when linking */
 .section .text.abort
 .globl abort
@@ -606,7 +927,7 @@ abort:
 .option norvc
 
 _vector_table:
-    j _start_trap
+    j _start_trap0
     j _start_trap1
     j _start_trap2
     j _start_trap3
