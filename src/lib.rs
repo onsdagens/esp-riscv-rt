@@ -15,7 +15,6 @@
 
 // NOTE: Adapted from riscv-rt/src/lib.rs
 #![no_std]
-#![recursion_limit="2048"]
 
 use core::arch::global_asm;
 
