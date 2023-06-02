@@ -581,366 +581,331 @@ _vector_table:
 r#"
 .option pop
 "#,
-    r#"_handler_0:
+r#"_handler_0:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
     jal ra, cpu_int_0_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_1:
+    "#,
+r#"_handler_1:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero
     la ra, cpu_int_1_handler
     jalr ra, ra
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_2:
+    "#,
+r#"_handler_2:
         
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_2_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_2_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_3:
+    "#,
+r#"_handler_3:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_3_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_3_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_4:
+    "#,
+r#"_handler_4:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_4_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_4_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_5:
+    "#,
+r#"_handler_5:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_5_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_5_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_6:
+    "#,
+r#"_handler_6:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_6_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_6_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_7:
+    "#,
+r#"_handler_7:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_7_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_7_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_8:
+    "#,
+r#"_handler_8:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_8_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_8_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_9:
+    "#,
+r#"_handler_9:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_9_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_9_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_10:
+    "#,
+r#"_handler_10:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_10_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_10_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_11:
+    "#,
+r#"_handler_11:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_11_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_11_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_12:
+    "#,
+r#"_handler_12:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_12_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_12_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_13:
+    "#,
+r#"_handler_13:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_13_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_13_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_14:
+    "#,
+r#"_handler_14:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_14_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_14_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_15:
+    "#,
+r#"_handler_15:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_15_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_15_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_16:
+    "#,
+r#"_handler_16:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_16_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_16_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_17:
+    "#,
+r#"_handler_17:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_17_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_17_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_18:
+    "#,
+r#"_handler_18:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_18_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_18_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_19:
+    "#,
+r#"_handler_19:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_19_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_19_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_20:
+    "#,
+r#"_handler_20:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_20_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_20_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_21:
+    "#,
+r#"_handler_21:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_21_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_21_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_22:
+    "#,
+r#"_handler_22:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_22_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_22_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_23:
+    "#,
+r#"_handler_23:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_23_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_23_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_24:
+    "#,
+r#"_handler_24:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_24_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_24_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_25:
+    "#,
+r#"_handler_25:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_25_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_25_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_26:
+    "#,
+r#"_handler_26:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_26_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_26_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_27:
+    "#,
+r#"_handler_27:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_27_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_27_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_28:
+    "#,
+r#"_handler_28:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_28_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_28_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_29:
+    "#,
+r#"_handler_29:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_29_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_29_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_30:
+    "#,
+r#"_handler_30:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_30_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_30_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
-    r#"_handler_31:
+    "#,
+r#"_handler_31:
     
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
-    /*push context to stack*/
     add s2 , ra, zero 
-    jal ra, cpu_int_31_handler
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
+    la ra, cpu_int_31_handler
+    jalr ra, ra
     jr s2, 0
-    /*de-stack context*/"#,
+    "#,
 r#" 
 _default_handler:
     addi sp, sp, -40*4
     sw ra, 0*4(sp)
     jal ra, _start_trap
     add s2, ra, zero  
-    /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
     jal ra, _default_handler /* for now just "panic loop" */
     jr s2, 0
 "#,
