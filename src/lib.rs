@@ -598,8 +598,9 @@ r#"
     sw ra, 0*4(sp)
     jal ra, _start_trap
     /*push context to stack*/
-    add s2 , ra, zero 
-    jal ra, cpu_int_1_handler
+    add s2 , ra, zero
+    la ra, cpu_int_1_handler
+    jalr ra, ra
     /*preserve return address so we may jump back when needed s2 can be overwritten since weve just pushed everything to stack anyway. */
     jr s2, 0
     /*de-stack context*/"#,
